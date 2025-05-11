@@ -5,8 +5,10 @@ trasporte Vtp ;domain: 'transporte' ;VTP password: 'transp0rte'
 
 # Indice 
 
-- [Modelo OSI](#modelo-osi-open-systems-interconnection)
-- [Modelo TCP/IP](#modelo-tcpip)
+- [Paso 1](#paso-1-diseño-y-modelado-de-la-arquitectura-de-comunicacion)
+   - [Repaso de modelos](#repaso-de-modelos-osi-y-tcpip)
+      - [Modelo OSI](#modelo-osi)
+      - [Modelo TCP/IP](#modelo-tcpip)
 
 # Paso 1: Diseño y Modelado de la Arquitectura de Comunicación
 
