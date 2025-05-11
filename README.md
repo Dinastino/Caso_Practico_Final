@@ -3,11 +3,16 @@
 edificio1 Vtp ;domain: 'gov' ;Vtp pasword: $c@alabazas$  
 trasporte Vtp ;domain: 'transporte' ;VTP password: 'transp0rte'  
 
+# Indice 
+
+- [Modelo OSI](#modelo-osi-open-systems-interconnection)
+- [Modelo TCP/IP](#modelo-tcpip)
+
 # Paso 1: Diseño y Modelado de la Arquitectura de Comunicación
 
-## Modelos de Referencia OSI y TCP/IP
+## Repaso de modelos OSI y TCP/IP
 
-### Modelo OSI (Open Systems Interconnection)
+### Modelo OSI
 
 El **modelo OSI** consta de **siete capas** que estructuran el proceso de comunicación de datos entre sistemas, dividiendo funciones específicas para garantizar una comunicación clara, ordenada y estandarizada:
 
@@ -82,3 +87,23 @@ El **modelo TCP/IP**, base de Internet, es un modelo más práctico y consta de 
 
 Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo adoptado globalmente** por su flexibilidad, escalabilidad y aplicación directa en redes como Internet.
 
+
+## Diseño Lógico y Segmentación
+
+
+
+
+# Paso 2: Capa Física – Cálculos y Selección de Tecnologías
+
+## Cálculo de la Capacidad de los Enlaces
+
+Se utiliza la fórmula de Shannon:  
+
+$$Donde: C = B * log_2(1+SNR)$$  
+
+Ancho de banda (B)  
+
+SNR: relación señal a ruido determinada.   
+La relación señal a ruido se mide en dB en un ancho de banda es:    
+
+$$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$  
