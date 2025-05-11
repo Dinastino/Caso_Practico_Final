@@ -5,10 +5,12 @@ trasporte Vtp ;domain: 'transporte' ;VTP password: 'transp0rte'
 
 # Indice 
 
-- [Paso 1](#paso-1-diseño-y-modelado-de-la-arquitectura-de-comunicacion)
+- [Paso 1](#paso-1-diseño-y-modelado-de-la-arquitectura-de-comunicación)
    - [Repaso de modelos](#repaso-de-modelos-osi-y-tcpip)
       - [Modelo OSI](#modelo-osi)
       - [Modelo TCP/IP](#modelo-tcpip)
+- [Paso 2](#paso-2-capa-física--cálculos-y-selección-de-tecnologías)
+   - [Cálculo de la Capacidad](#cálculo-de-la-capacidad-de-los-enlaces)
 
 # Paso 1: Diseño y Modelado de la Arquitectura de Comunicación
 
