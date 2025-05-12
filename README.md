@@ -160,23 +160,44 @@ Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo 
 
 ![image](https://github.com/user-attachments/assets/02a48a6d-362c-4367-beeb-f8cf9464567a)
 
-#### Dispositivos por zonas
+### Dispositivos por zonas
+
+Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus propias Vlans y protocolo vtp
 
 - Zona Gubernamental
+
+   ![Gobierno drawio](https://github.com/user-attachments/assets/88009416-0a39-4d2a-a347-9d2558c8f11a)
+
    - **Elemento:** Edificio Gubernamental
-   - **Conectividad:**
-     - Conectado mediante fibra al Edificio Genérico
-     - Conexión directa a Transporte
-   - **Función:** Gestión política, administración pública, servidores críticos del gobierno.
+   - **Dispositivos edificio**:
+        - Router cisco 2911
+        - X2 Firewall ASA 5506-X
+        - X6 Server-PT:
+             - DNS, HTTP/HTTPS, FTP, DHCP, EMAIL. IOT.
+        - Switch L3 cisco 2650-24PS
+        - X6 switch L2 cisco 22960-24TT
+        - X4 Access point-PT
+        - X20 PC-PT
+        - X4 MCU
+        - X4 Webcams
+        - X8 Home Speaker
+        - X4 Smoke detector
+        - X4 Carbon monoxide detector
+        - Una Cafetera
+    
+
+   - Cables de cobre cat 6 y Gb para conexione entre dispositivos
+   - > **Nota:** Cada vlan excepto la 10 representa una planta diferente
+
+   ![image](https://github.com/user-attachments/assets/79ae798c-0c65-4bf0-bc02-b86c164aa023)
+
 
 ---
 
 - Zona de Seguridad
    - **Elemento:** Central de Seguridad
-   - **Conectividad:**
-     - Fibra al Edificio Genérico
-     - Enlace al Edificio Genérico 2
-   - **Función:** Monitoreo urbano, vigilancia, control de emergencias y servicios de seguridad pública.
+   - **Dispositivos:**
+        - Router cisco 2911
 
 ---
 
