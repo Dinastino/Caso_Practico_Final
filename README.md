@@ -94,6 +94,71 @@ Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo 
 
 ## Diseño Lógico y Segmentación
 
+### Diseño de red de la ciudad
+
+![Diagrama sin título drawio](https://github.com/user-attachments/assets/2cf5d2b0-39ca-4f5b-a9d2-493416d0a45d)
+
+## 2. Segmentación por Zonas
+
+- Zona Gubernamental
+   - **Elemento:** Edificio Gubernamental
+   - **Conectividad:**
+     - Conectado mediante fibra al Edificio Genérico
+     - Conexión directa a Transporte
+   - **Función:** Gestión política, administración pública, servidores críticos del gobierno.
+
+---
+
+- Zona de Seguridad
+   - **Elemento:** Central de Seguridad
+   - **Conectividad:**
+     - Fibra al Edificio Genérico
+     - Enlace al Edificio Genérico 2
+   - **Función:** Monitoreo urbano, vigilancia, control de emergencias y servicios de seguridad pública.
+
+---
+
+- Zona de Transporte
+   - **Elemento:** Centro de Transporte
+   - **Conectividad:**
+     - Enlace a Edificio Gubernamental y Edificio Genérico 2
+     - Acceso a Internet
+   - **Función:** Gestión de flotas, tráfico inteligente, control de movilidad urbana.
+
+---
+
+- Zonas Genéricas
+   - **Elementos:**
+     - Edificio Genérico
+     - Edificio Genérico 2
+   - **Conectividad:**
+     - Edificio Genérico enlaza con Gubernamental, Seguridad e Internet
+     - Edificio Genérico 2 enlaza con Seguridad y Transporte
+   - **Función:** Servicios mixtos, soporte para otras zonas, acceso a recursos generales y distribución de red.
+
+---
+
+- Internet
+   - **Elemento:** Nube de Internet
+   - **Conectividad:**
+     - Conectada al Edificio Genérico y Transporte
+   - **Función:** Conectividad externa, servicios en la nube, acceso remoto.
+
+
+
+#### 3. Tipos de Enlace
+- **Fibra:** Alta velocidad y capacidad. Usado entre zonas críticas.
+- **Serial:** Conexiones punto a punto o de respaldo.
+- **Salidas al resto de red:** Interconexión general con otros sectores de la red metropolitana. Se presumen enlaces de fibra o seriales.
+
+
+### Representacion en cisco packet tracer
+
+![image](https://github.com/user-attachments/assets/02a48a6d-362c-4367-beeb-f8cf9464567a)
+
+
+
+
 
 
 
@@ -111,4 +176,40 @@ SNR: relación señal a ruido determinada.
 La relación señal a ruido se mide en dB en un ancho de banda es:    
 
 $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$  
+
+1. **Fa/Trenzado de 250Mb**  
+    Cable de cobre categoría 6 con ancho de banda de 250 MHz. 
+
+    $$C = 2,5 * 10^8 * log_2(1+1000) = 2,5 * 10^8 * log_2(1001) = 2,5 * 10^8 * 9.967 = 2.49 * 10^9bps = 2.49 Gbps$$
+
+   *Este tipo de cable proporciona conexiones repidas entre switches-ordenadores *
+
+2. **Acces-point/Inalámbrico**
+
+3. **Entre switches/Cable de cober de Gb**
+
+    Cable de cobre con **ancho de banda de 1 GHz**, empleado para manejar mayor tráfico entre switches.
+
+    $C = 1* 10^9 * log_2(1001) =  1 * 10^9 * 9.967 = 9,96710^9 bps = 9.97 Gbps$
+
+   *Este tipo de enlace proporciona un **canal de alta capacidad** para interconexion entre la red y de la red al router.*
+
+4. **Fibra Óptica**
+
+   Fibra óptica utilizada como medio de transmisión troncal entre equipos principales.
+
+   $$C = 50 \times 10^{12} \cdot \log_2(1 + 1000) = 50 \times 10^{12} \cdot \log_2(1001)$$
+
+   $$\log_2(1001) \approx 9.967$$
+
+   $$C \approx 50 \times 10^{12} \cdot 9.967 = 4.9835 \times 10^{14} \text{ bps} = 498.35 \text{ Tbps}$$
+
+    *Aunque la fibra óptica permite **enormes capacidades teóricas**, en la práctica está limitada por los **componentes electrónicos**, especialmente los **conversores optoelectrónicos**, que actualmente permiten **hasta 100 Gbps por canal**.*
+
+
+> Tener en cuenta que todo esto es teórico ya que el cisco packet pone limitaciones por el tipo de puerto ejm: el FastEthernet esta capado a 100Mbps
+   
+
+## Selección de Técnicas de Modulación
+
 
