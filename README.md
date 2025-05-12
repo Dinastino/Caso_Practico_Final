@@ -231,8 +231,14 @@ $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$
    *Este tipo de cable proporciona conexiones repidas entre switches-ordenadores *
 
 2. **Acces-point/Inalámbrico**
+   Enlaces inalambricos de wifi en cada access-point.
 
-3. **Entre switches/Cable de cober de Gb**
+
+   $$C = B \cdot \log_2(1 + S/N) = 20 \times 10^6 \cdot \log_2(101) \approx 20 \times 10^6 \cdot 6.658 = 133.16 \text{ Mbps}$$
+
+   >  **Nota:** Este valor es teórico. En redes Wi-Fi reales, la velocidad efectiva suele estar entre **40–80 Mbps** dependiendo de la interferencia, distancia y calidad del enlace.
+
+4. **Entre switches/Cable de cober de Gb**
 
     Cable de cobre con **ancho de banda de 1 GHz**, empleado para manejar mayor tráfico entre switches.
 
@@ -240,7 +246,7 @@ $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$
 
    *Este tipo de enlace proporciona un **canal de alta capacidad** para interconexion entre la red y de la red al router.*
 
-4. **Fibra Óptica**
+5. **Fibra Óptica**
 
    Fibra óptica utilizada como medio de transmisión troncal entre equipos principales.
 
@@ -257,5 +263,102 @@ $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$
    
 
 ## Selección de Técnicas de Modulación
+La modulación es el proceso mediante el cual se adapta una señal digital a una portadora analógica para poder ser transmitida eficientemente por un medio físico (cable, aire o fibra).  
+A continuación, se describen las técnicas más relevantes según el tipo de medio:
 
+- **Para enlaces de cobre**, como el trenzado Cat 6 y las conexiones entre switches, se utiliza la modulación **16-QAM**, ya que ofrece una buena relación entre **eficiencia espectral y confiabilidad** en medios con distancias cortas y buena calidad de señal.
+
+- **Para enlaces de fibra óptica**, se utiliza **64-QAM**, ya que la fibra proporciona una **relación señal/ruido muy alta**, lo que permite el uso de modulaciones densas para **maximizar el rendimiento** y el aprovechamiento del enorme ancho de banda disponible.
+
+- **Para enlaces inalámbricos**, se emplea una combinación de **OFDM** con modulaciones **adaptativas**, como **QPSK**, **16-QAM**, **64-QAM** o incluso **256-QAM**, dependiendo de la calidad del canal. Esta técnica permite **mejorar la resistencia a la interferencia y mantener la eficiencia espectral**, ajustando dinámicamente la modulación según las condiciones del entorno.
+
+ ## Evaluación de la Eficiencia del Encapsulamiento
+
+En una red, los datos generados por la aplicación deben atravesar múltiples capas del modelo OSI o TCP/IP. Cada capa añade su propia **cabecera (header)**, lo que genera una **sobrecarga**. Esta sobrecarga reduce la **eficiencia real** del canal de transmisión.
+
+---
+
+##  Evaluación de la Eficiencia del Encapsulamiento:
+
+Supongamos que se desea enviar **1000 bytes** de datos útiles (payload) usando una red Ethernet con IP y TCP.
+
+#### Cabeceras involucradas:
+
+| Capa       | Protocolo | Tamaño de Cabecera |
+|------------|-----------|--------------------|
+| Enlace     | Ethernet  | 18 bytes (14 de cabecera + 4 de CRC) |
+| Red        | IP        | 20 bytes            |
+| Transporte | TCP       | 20 bytes (sin opciones) |
+
+**Tamaño total del paquete transmitido**:
+
+$$\text{Total} = 1000\ \text{(datos)} + 20\ (\text{TCP}) + 20\ (\text{IP}) + 18\ (\text{Ethernet}) = 1058\ \text{bytes}$$
+
+---
+
+#### Cálculo de eficiencia
+
+
+$$\text{Eficiencia} = \frac{\text{Datos útiles}}{\text{Datos totales transmitidos}} = \frac{1000}{1058} \approx 0.9452 = 94.52\%$$
+
+> 🔍 Esto significa que el 5.48% del ancho de banda se utiliza en **cabeceras**, no en datos reales.
+
+---
+
+####  Consideraciones
+
+- En paquetes más pequeños, la **eficiencia disminuye**, ya que la proporción de cabecera es mayor.
+- En tramas mínimas (por ejemplo, 46 bytes de datos en Ethernet), la eficiencia puede caer por debajo del 50%.
+- Si se suman otras capas (SSL, VPN, encapsulamiento GRE, etc.), la sobrecarga crece aún más.
+
+
+
+# Paso 3: Capa de Red – Direccionamiento, Subneteo y Enrutamiento
+
+
+
+
+
+
+
+# Paso 4: Capa de Transporte – Selección de Protocolos y Cálculo del Tamaño de Ventana
+
+## Selección de Protocolos
+
+La elección del **protocolo de transporte** es esencial en el diseño de una red, ya que impacta directamente en la **eficiencia, fiabilidad y experiencia del usuario**. La selección se realiza según la **naturaleza del servicio** y los **requisitos del tráfico**.
+
+### 1. Criterios Generales
+
+- **TCP (Transmission Control Protocol)**  
+  Se emplea en aplicaciones que requieren **transporte fiable**, con control de errores, confirmación de entrega y orden de paquetes. Es ideal para servicios donde la **integridad de los datos es crítica**, como transacciones financieras, acceso a plataformas administrativas o transferencia de archivos.
+
+- **UDP (User Datagram Protocol)**  
+  Se utiliza en servicios donde **la velocidad y la baja latencia** son más importantes que la fiabilidad, como **videoconferencias**, **telefonía IP** o **streaming en vivo**. UDP no garantiza entrega ni orden, pero permite que la transmisión continúe sin interrupciones si se pierden algunos paquetes, lo cual es aceptable en entornos en tiempo real.
+
+
+### 2. Comparación según el tipo de tráfico
+
+| Servicio / Aplicación                            | Protocolo usado | Justificación breve                                                  |
+|:--------------------------------------------------|:----------------|:---------------------------------------------------------------------|
+| Acceso a sistemas administrativos (ERP, Intranet, CRM) | **TCP**        | Requiere fiabilidad total en el transporte de datos.                |
+| Transferencia de archivos (FTP, SFTP, SCP)       | **TCP**         | Necesita transmisión íntegra y segura de archivos.                  |
+| Correo electrónico (SMTP, IMAP, POP3)            | **TCP**         | Garantiza entrega completa y ordenada de mensajes.                  |
+| Navegación web (HTTP/HTTPS)                      | **TCP**         | Necesita fiabilidad en la entrega de páginas y datos.               |
+| Cámaras IP de seguridad (streaming)              | **UDP**         | Prioriza la inmediatez de video frente a errores menores.           |
+| Telefonía IP (VoIP)                              | **UDP**         | Baja latencia es más crítica que la corrección de errores.          |
+| Sensores IoT (telemetría continua)               | **UDP**         | El envío constante de datos en tiempo real es prioritario.          |
+| Videoconferencia en vivo (WebRTC, Zoom, etc.)    | **UDP**         | Necesita fluidez en tiempo real, aceptando posible pérdida mínima.  |
+
+---
+
+### 3. Consideraciones específicas
+
+- Para **transferencia de archivos**, como documentos, proyectos o recursos digitales, se recomienda **TCP**.  
+  Sus características como **control de flujo, retransmisión de paquetes, y corrección de errores** garantizan la **integridad** de la información, aunque introduzca una ligera latencia.
+
+- Para **servicios en tiempo real**, como videollamadas, videovigilancia o transmisiones en vivo, se opta por **UDP**.  
+  Su naturaleza sin conexión y sin necesidad de confirmaciones permite una **baja latencia** y mayor fluidez, incluso si hay pérdidas menores de datos, lo cual es aceptable en estos contextos.
+
+
+## Cálculo del Tamaño de Ventana en TCP
 
