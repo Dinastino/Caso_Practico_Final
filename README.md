@@ -362,5 +362,10 @@ La elección del **protocolo de transporte** es esencial en el diseño de una re
   Su naturaleza sin conexión y sin necesidad de confirmaciones permite una **baja latencia** y mayor fluidez, incluso si hay pérdidas menores de datos, lo cual es aceptable en estos contextos.
 
 
+
+# Paso 5: Capa de Aplicación – Servicios, Multiplexación y Multimedia
+
+## Implementación de Servicios y Resolución de Nombres
+
 ## Cálculo del Tamaño de Ventana en TCP
 
