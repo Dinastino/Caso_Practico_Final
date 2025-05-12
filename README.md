@@ -98,7 +98,7 @@ Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo 
 
 ![Diagrama sin título drawio](https://github.com/user-attachments/assets/2cf5d2b0-39ca-4f5b-a9d2-493416d0a45d)
 
-## 2. Segmentación por Zonas
+#### 2. Segmentación por Zonas
 
 - Zona Gubernamental
    - **Elemento:** Edificio Gubernamental
@@ -154,11 +154,57 @@ Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo 
 
 ### Representacion en cisco packet tracer
 
+- **Vista fisica**
+
 ![image](https://github.com/user-attachments/assets/02a48a6d-362c-4367-beeb-f8cf9464567a)
 
+#### Dispositivos por zonas
 
+- Zona Gubernamental
+   - **Elemento:** Edificio Gubernamental
+   - **Conectividad:**
+     - Conectado mediante fibra al Edificio Genérico
+     - Conexión directa a Transporte
+   - **Función:** Gestión política, administración pública, servidores críticos del gobierno.
 
+---
 
+- Zona de Seguridad
+   - **Elemento:** Central de Seguridad
+   - **Conectividad:**
+     - Fibra al Edificio Genérico
+     - Enlace al Edificio Genérico 2
+   - **Función:** Monitoreo urbano, vigilancia, control de emergencias y servicios de seguridad pública.
+
+---
+
+- Zona de Transporte
+   - **Elemento:** Edificio de transporte y los semaforos
+   - **Dispositivos edificio**:
+       - Un router 2911
+       - Dos firewall ASA 5506-X
+       - Un firewall 5505
+       - Seis Server-PT
+       - Seis switches 2960-24TT
+       - 14 PC-PT
+       - 2 Webcams
+       - 4 Home Speakers
+       - 4 semaforos:
+            - Un mcu(Micro controlador)
+            - Tres Led-RGB
+
+---
+
+- Zonas Genéricas
+   - **Elementos:**
+     - Edificio Genérico: Un router 2911
+     - Edificio Genérico 2: Un router 2911
+
+---
+
+- Internet
+   - **Dispositivos:** Cloud-PT para simular conexion a internet.
+  
 
 
 
