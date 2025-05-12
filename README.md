@@ -111,3 +111,4 @@ SNR: relación señal a ruido determinada.
 La relación señal a ruido se mide en dB en un ancho de banda es:    
 
 $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$  
+
