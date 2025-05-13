@@ -160,6 +160,8 @@ Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo 
 
 ![image](https://github.com/user-attachments/assets/02a48a6d-362c-4367-beeb-f8cf9464567a)
 
+> **Nota:** Es posible que no aparezcan todos los servicios/dispositivos que existen en la ciudad dada la posibilidad de que la vista este demasiado congestionada para la visualización
+
 ### Dispositivos por zonas
 
 Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus propias Vlans y protocolo vtp
