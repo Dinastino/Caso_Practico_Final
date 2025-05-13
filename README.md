@@ -204,6 +204,9 @@ Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus 
 ---
 
 - Zona de Transporte
+
+![Transporte](https://github.com/user-attachments/assets/49f01f4b-2222-43c0-997a-9419c8713b97)
+
    - **Elemento:** Edificio de transporte y los semaforos
    - **Dispositivos edificio**:
        - Un router 2911
@@ -222,10 +225,15 @@ Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus 
        - X5 Access-Point-PT
        - X2 Humiture monitor
        - X2 Carbon dioxide detector
-    
+
 
    - Cables de cobre cat 6 y Gb para conexione entre dispositivos
    - > **Nota:** Cada vlan excepto la 11 es un piso diferente
+
+![image](https://github.com/user-attachments/assets/d4745a5e-53bb-4a3d-b489-d53b8ffbade2)
+![image](https://github.com/user-attachments/assets/cfd49024-8d63-4f26-836f-f01946bf51d0)
+
+
 
 ---
 
