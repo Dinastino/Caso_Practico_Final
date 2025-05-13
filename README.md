@@ -200,6 +200,18 @@ Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus 
    - **Elemento:** Central de Seguridad
    - **Dispositivos:**
         - Router cisco 2911
+        - Firewall Cisco ASA 5506-X
+        - X5 Server-PT:
+             - DNS, FTP, DHCP, IoT, Streaming
+        - Central Office server
+        - Switch L3 cisco 2650-24PS
+        - X8 switch L2 cisco 22960-24TT
+        - X3 Access point-PT
+        - X11 PC-PT
+        - Laptop-PT
+        - X2 TV-PT
+        - X8 IP-phone
+        - X6 Webcams
 
 ---
 
