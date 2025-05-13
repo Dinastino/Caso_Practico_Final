@@ -136,7 +136,7 @@ Ambos modelos permiten entender y diseñar redes, pero el **TCP/IP es el modelo 
    - **Conectividad:**
      - Edificio Genérico enlaza con Gubernamental, Seguridad e Internet
      - Edificio Genérico 2 enlaza con Seguridad y Transporte
-   - **Función:** Servicios mixtos, soporte para otras zonas, acceso a recursos generales y distribución de red.
+     - Los dos edificios se conectan entre ellos.
 
 ---
 
@@ -207,14 +207,23 @@ Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus 
        - Un router 2911
        - Dos firewall ASA 5506-X
        - Un firewall 5505
-       - Seis Server-PT
-       - Seis switches 2960-24TT
-       - 14 PC-PT
-       - 2 Webcams
-       - 4 Home Speakers
-       - 4 semaforos:
+       - X6 Server-PT:
+            - DNS, HTTP, FTP, DHCP, Email. IoT.
+       - Switch L3 cisco 2650-24PS
+       - X6 switch L2 2960-24TT
+       - X14 PC-PT
+       - X2 Webcams
+       - X4 Home Speakers
+       - X4 semaforos:
             - Un mcu(Micro controlador)
             - Tres Led-RGB
+       - X5 Access-Point-PT
+       - X2 Humiture monitor
+       - X2 Carbon dioxide detector
+    
+
+   - Cables de cobre cat 6 y Gb para conexione entre dispositivos
+   - > **Nota:** Cada vlan excepto la 11 es un piso diferente
 
 ---
 
@@ -293,7 +302,7 @@ A continuación, se describen las técnicas más relevantes según el tipo de me
 
 - **Para enlaces de fibra óptica**, se utiliza **64-QAM**, ya que la fibra proporciona una **relación señal/ruido muy alta**, lo que permite el uso de modulaciones densas para **maximizar el rendimiento** y el aprovechamiento del enorme ancho de banda disponible.
 
-- **Para enlaces inalámbricos**, se emplea una combinación de **OFDM** con modulaciones **adaptativas**, como **QPSK**, **16-QAM**, **64-QAM** o incluso **256-QAM**, dependiendo de la calidad del canal. Esta técnica permite **mejorar la resistencia a la interferencia y mantener la eficiencia espectral**, ajustando dinámicamente la modulación según las condiciones del entorno.
+- **Para enlaces inalámbricos**, se emplea una combinación de **OFDM** con modulacion de **QAM** adaptativa lo que permite cambiar entre numero de bits por simbolo dependiendo de la calidad de la transmision, esto es especificamente importante en las redes inalambricas de fuera de los edificios ya que estan en el exterior son mas suceptibles a los cambios.
 
  ## Evaluación de la Eficiencia del Encapsulamiento
 
@@ -324,7 +333,7 @@ $$\text{Total} = 1000\ \text{(datos)} + 20\ (\text{TCP}) + 20\ (\text{IP}) + 18\
 
 $$\text{Eficiencia} = \frac{\text{Datos útiles}}{\text{Datos totales transmitidos}} = \frac{1000}{1058} \approx 0.9452 = 94.52\%$$
 
-> 🔍 Esto significa que el 5.48% del ancho de banda se utiliza en **cabeceras**, no en datos reales.
+ Esto significa que el 5.48% del ancho de banda se utiliza en **cabeceras**, no en datos reales.
 
 ---
 
@@ -338,9 +347,170 @@ $$\text{Eficiencia} = \frac{\text{Datos útiles}}{\text{Datos totales transmitid
 
 # Paso 3: Capa de Red – Direccionamiento, Subneteo y Enrutamiento
 
+## Diseño del Esquema de Direccionamiento IP
+
+### Zona Gubernamental
+Red de la zona gubernamental incluyendo todos los servicios.
+
+- La red interna es la 192.168.1.0/24:
+    - **Rango de Hosts:** 192.168.1.2 – 192.168.1.254
+    - **Default gateway:** 192.168.1.1
+    - **Broadcast:** 192.168.1.256
+    - **Total de Hosts Útiles:** 254  
+
+- La dmz es la 176.20.20.0/26:
+    - **Rango de Hosts:** 176.20.20.2 – 176.20.20.127
+    - **Default gateway:** 176.20.20.1
+    - **Broadcast:** 176.20.20.128
+    - **Total de Hosts Útiles:** 126  
+
+- La red externa es la 200.10.15.0/24:
+    - **Rango de Hosts:** 200.10.15.2 – 200.1.1.254
+    - **Default gateway:** 200.10.15.1
+    - **Broadcast:** 200.10.15.256
+    - **Total de Hosts Útiles:** 254
+
+Aparte la red se divide en multiple vlans cada una con su propia IP, gateway y broadcast. 
+
+| VLAN  | Descripción             | Red IP             | Gateway           | Broadcast           |
+|-----|----------|----------|--------------------|----------------------|
+| 100   | vlan 100     | 192.168.10.0/24   | 192.168.10.1      | 192.168.10.255      |
+| 200      |  vlan 200      | 192.168.20.0/24   | 192.168.20.1      | 192.168.20.255      |
+| 300      | vlan 300    | 192.168.30.0/24    | 192.168.30.1       | 192.168.30.255       |
+| 400      | vlan 400    | 192.168.40.0/24    | 192.168.40.1       | 192.168.40.255       |
 
 
 
+**VLAN 10 – 192.168.99.0/24** Servidores
+
+- **Rango de Hosts:** 192.168.99.2 – 192.168.99.254
+- **DDefault gateway:** 192.168.99.1
+- **Broadcast:** 192.168.99.256
+- **Total de Hosts Útiles:** 254
+
+
+Cada VLAN tiene su propia subred /24 (máscara de subred 255.255.255.0), lo cual permite hasta 254 hosts por segmento, ideal para entornos académicos de tamaño medio.
+
+**VLAN 100 – 192.168.10.0/24** Recepción
+
+- **Rango de Hosts:** 192.168.10.2 – 192.168.10.254
+- **DDefault gateway:** 192.168.10.1
+- **Broadcast:** 192.168.10.256
+- **Total de Hosts Útiles:** 254
+
+**VLAN 200 – 192.168.20.0/24** Planta 1
+
+- **Rango de Hosts:** 192.168.20.2 – 192.168.200.254
+- **Default gateway:** 192.168.20.1
+- **Broadcast:** 192.168.20.256
+- **Total de Hosts Útiles:** 254
+
+**VLAN 300 – 192.168.30.0/24** Planta 2
+
+- **Rango de Hosts:** 192.168.30.2 – 192.168.30.254
+- **DDefault gateway:** 192.168.30.1
+- **Broadcast:** 192.168.30.256
+- **Total de Hosts Útiles:** 254
+
+**VLAN 400 – 192.168.40.0/24** Planta 3
+
+- **Rango de Hosts:** 192.168.40.2 – 192.168.40.254
+- **DDefault gateway:** 192.168.40.1
+- **Broadcast:** 192.168.40.256
+- **Total de Hosts Útiles:** 254
+
+
+> **Nota:** Todas la Vlans y la red interna reciben sus IP's a traves del servidor de DHCP excepto los puntos/enlaces criticos.
+---
+
+- Zona de Seguridad
+   
+
+---
+
+### Zona de Transporte
+Red de la zona de transporte [Router]-----`Red externa`----[Firewall 1]-----`DMZ`-----[Firewall 2]-----`Red interna`----[Switch L3], y la red a la que se conectan los dispositivos de IoT como los semaforos o los sensores
+
+- La red interna es la 192.168.3.0/24:
+    - **Rango de Hosts:** 192.168.3.2 – 192.168.3.254
+    - **Default gateway:** 192.168.3.1
+    - **Broadcast:** 192.168.3.256
+    - **Total de Hosts Útiles:** 254  
+
+- La dmz es la 176.10.20.0/26:
+    - **Rango de Hosts:** 176.10.20.2 – 176.10.20.127
+    - **Default gateway:** 176.10.20.1
+    - **Broadcast:** 176.10.20.128
+    - **Total de Hosts Útiles:** 126  
+
+- La red externa es la 200.4.4.0/24:
+    - **Rango de Hosts:** 200.4.4.2 – 200.4.4.254
+    - **Default gateway:** 200.4.4.1
+    - **Broadcast:** 200.4.4.256
+    - **Total de Hosts Útiles:** 254
+ 
+- Red para los dispositivos de IoT externos -> 192.168.12.0/24:
+    - **Rango de Hosts:** 192.168.12.2 – 192.168.12.2
+    - **Default gateway:** 192.168.12.1
+    - **Broadcast:** 192.168.12.256
+    - **Total de Hosts Útiles:** 254
+
+Aparte la red se divide en multiple vlans cada una con su propia IP, gateway y broadcast. 
+
+| VLAN  | Descripción             | Red IP             | Gateway           | Broadcast           |
+|-----|----------|----------|--------------------|----------------------|
+| 100   | vlan 5     | 192.168.5.0/24   | 192.168.5.1      | 192.168.5.255      |
+| 200      |  vlan 15      | 192.168.15.0/24   | 192.168.15.1      | 192.168.15.255      |
+| 300      | vlan 25    | 192.168.25.0/24    | 192.168.25.1       | 192.168.25.255       |
+
+
+**VLAN 11 – 192.168.11.0/24** Servidores
+
+   - **Rango de Hosts:** 192.168.11.2 – 192.168.11.254
+   - **DDefault gateway:** 192.168.11.1
+   - **Broadcast:** 192.168.11.256
+   - **Total de Hosts Útiles:** 254
+
+Cada VLAN tiene su propia subred /24 (máscara de subred 255.255.255.0), lo cual permite hasta 254 hosts por segmento, ideal para entornos académicos de tamaño medio.
+
+**VLAN 100 – 192.168.10.0/24** Recepción
+
+   - **Rango de Hosts:** 192.168.10.2 – 192.168.10.254
+   - **DDefault gateway:** 192.168.10.1
+   - **Broadcast:** 192.168.10.256
+   - **Total de Hosts Útiles:** 254
+
+**VLAN 200 – 192.168.20.0/24** Planta 1
+
+   - **Rango de Hosts:** 192.168.20.2 – 192.168.200.254
+   - **Default gateway:** 192.168.20.1
+   - **Broadcast:** 192.168.20.256
+   - **Total de Hosts Útiles:** 254
+
+**VLAN 300 – 192.168.30.0/24** Planta 2
+
+- **Rango de Hosts:** 192.168.30.2 – 192.168.30.254
+- **DDefault gateway:** 192.168.30.1
+- **Broadcast:** 192.168.30.256
+- **Total de Hosts Útiles:** 254
+
+## Enrutamiento y Rutas Óptimas
+
+
+
+
+### Enrutamiento por inundación en caso de error
+El enrutamiento por inundacion debido a su gran carga sobre la red no se utiliza como un sistema principal viable, pero es util en caso de errores o conexiones caidas
+- En caso de que se detecte una caida de la interfaz por la que deberia dirigirse el paquete, se imagina que el router no sabe otra ruta, se activaria el enrutamiento por inundacion:
+   - Se envia el paquete por todas las interfaces conocidas
+   - Se le asigna un TTL especifico para evitar un paquete infinito
+   - Se espera que al enviarlo como un broadcas por todas partes se pueda aun llegar al destino
+
+| Ventajas                        | Desventajas                           |
+|----------------------------------|----------------------------------------|
+| Garantiza entrega si hay camino | Genera tráfico redundante              |
+| No requiere tabla de rutas      | Posibilidad de congestión en la red    |
+| Resistente a fallos             | No escala bien en redes grandes        |
 
 
 
@@ -383,10 +553,90 @@ La elección del **protocolo de transporte** es esencial en el diseño de una re
   Su naturaleza sin conexión y sin necesidad de confirmaciones permite una **baja latencia** y mayor fluidez, incluso si hay pérdidas menores de datos, lo cual es aceptable en estos contextos.
 
 
+## Cálculo del Tamaño de Ventana en TCP
+
+#### Parámetros medidos:
+Utilizando un ping de un ordenador a otro de la red se obtienen estos valores
+
+- **RTT promedio observado en la simulación:** `1 ms`
+- **RTT convertido a segundos:** `RTT = 1 ms = 0.001 segundos`
+- **Ancho de banda simulado:** `100 Mbps`
+
+####  Cálculo:
+
+Se aplica la fórmula:
+
+
+$$\text{Ventana (bytes)} = \frac{Ancho de Banda (bps) \times RTT (seg)}{8}$$
+
+
+
+$$\text{Ventana (bytes)} = \frac{100,000,000 \times 0.001}{8} = \frac{100,000}{8} = 12,500 \text{ bytes}$$
+
+Luego, calculamos cuántos segmentos TCP de tamaño estándar (MSS) se pueden enviar:
+
+$$\text{Cálculo de segmentos TCP (MSS = 1460 bytes) }$$
+
+$$
+\text{Segmentos} = \frac{12,500}{1460} \approx 8 \text{ segmentos}
+$$
+
+$_\text{El ancho en de 100Mbps dado que ese es el maximo en cisco packet tracer}$
+
+#### Resultado:
+
+El tamaño óptimo de la ventana de transmisión TCP en los enlaces simulados es de aproximadamente **12,500 bytes**, lo que equivale a unos **8 segmentos TCP** de 1460 bytes. Este tamaño garantiza una transmisión eficiente, minimizando esperas por confirmaciones y aprovechando al máximo la capacidad del canal.
+
 
 # Paso 5: Capa de Aplicación – Servicios, Multiplexación y Multimedia
 
 ## Implementación de Servicios y Resolución de Nombres
+### 1. Diseño la configuración
 
-## Cálculo del Tamaño de Ventana en TCP
+
+### 2. Proceso de Resolución de Nombres
+
+1. El cliente solicita un dominio (ej. `www.campus.edu`).
+2. La consulta es enviada al servidor DNS local configurado.
+3. Si no tiene la entrada en caché, consulta a servidores superiores.
+4. Una vez resuelta, la IP se devuelve al cliente.
+5. El cliente usa esa IP para conectarse al servidor correspondiente.
+
+> **Caché de DNS**: mejora el rendimiento al guardar respuestas anteriores y reducir tráfico.
+
+
+## Servicios Multimedia:
+
+Se emplearán dos enfoques distintos, optimizados según la naturaleza del servicio:
+
+#### 1. UDP Streaming (para Cámaras de Seguridad)
+
+- Utiliza protocolos como **RTP (Real-time Transport Protocol)** sobre **UDP**.
+- Se establece un flujo continuo de datos desde la cámara al servidor o cliente visualizador.
+- **Ventajas**:
+  - Baja latencia.
+  - No se detiene si hay pérdida de paquetes.
+- **Aplicación ideal**: monitoreo en vivo de cámaras IP, donde la fluidez es más importante que la precisión de cada fotograma.
+
+#### 2. Adaptive HTTP Streaming (para Eventos Públicos)
+
+- Se usará **DASH (Dynamic Adaptive Streaming over HTTP)** o **HLS (HTTP Live Streaming)**.
+- El contenido se divide en fragmentos de video codificados en diferentes calidades.
+- El cliente selecciona automáticamente la calidad adecuada según su ancho de banda.
+- **Ventajas**:
+  - Compatible con navegadores web estándar.
+  - Escalable mediante servidores HTTP.
+- **Aplicación ideal**: transmisión de conferencias, eventos públicos y contenido multimedia institucional.
+
+
+### Adaptación de Calidad según Ancho de Banda
+
+Para asegurar una experiencia óptima a todos los usuarios, independientemente de sus condiciones de red, se aplicarán las siguientes técnicas:
+
+- **Detección de ancho de banda en tiempo real**: el cliente mide la velocidad de descarga y selecciona el nivel de calidad más adecuado.
+- **Cambio dinámico de resolución**: el reproductor puede cambiar entre calidades (por ejemplo, de 1080p a 480p) durante la reproducción sin cortar la transmisión.
+- **Codificación múltiple del contenido**: los servidores almacenarán y entregarán varias versiones del mismo contenido a diferentes tasas de bits.
+- **Buffer adaptativo**: se gestiona un búfer inteligente para equilibrar entre fluidez y calidad.
+
+> En enlaces críticos, se priorizará el tráfico multimedia mediante políticas de **Quality of Service (QoS)** para garantizar estabilidad y reducir la latencia.
 
