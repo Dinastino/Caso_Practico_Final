@@ -13,6 +13,11 @@ trasporte Vtp ;domain: 'transporte' ;VTP password: 'transp0rte'
       - [Modelo TCP/IP](#modelo-tcpip)
 - [Paso 2](#paso-2-capa-física--cálculos-y-selección-de-tecnologías)
    - [Cálculo de la Capacidad](#cálculo-de-la-capacidad-de-los-enlaces)
+   - [Técnicas de modulacion](#selección-de-técnicas-de-modulación)
+   - [Eficiencia del encapsulamiento](#evaluación-de-la-eficiencia-del-encapsulamiento)
+- [Paso 3](#paso-3-capa-de-red--direccionamiento-subneteo-y-enrutamiento)
+   - [Diseño de red](#diseño-del-esquema-de-direccionamiento-ip)
+   - 
 
 # Paso 1: Diseño y Modelado de la Arquitectura de Comunicación
 
@@ -292,7 +297,7 @@ $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$
 
    >  **Nota:** Este valor es teórico. En redes Wi-Fi reales, la velocidad efectiva suele estar entre **40–80 Mbps** dependiendo de la interferencia, distancia y calidad del enlace.
 
-4. **Entre switches/Cable de cober de Gb**
+4. **Entre switches/Cable de cobre de Gb**
 
     Cable de cobre con **ancho de banda de 1 GHz**, empleado para manejar mayor tráfico entre switches.
 
