@@ -2,22 +2,32 @@ https://github.com/Dinastino/Caso_Practico_Final.git
 
 # Caso_Practico_Final
 
-edificio1 Vtp ;domain: 'gov' ;Vtp pasword: $c@alabazas$  
-trasporte Vtp ;domain: 'transporte' ;VTP password: 'transp0rte'  
+Gobierno Vtp ;domain: `gov` ;Vtp pasword: `c@alabaza`  
+Trasporte Vtp ;domain: `transporte` ;VTP password: `transp0rte`  
 
 # Indice 
 
-- [Paso 1](#paso-1-diseño-y-modelado-de-la-arquitectura-de-comunicación)
-   - [Repaso de modelos](#repaso-de-modelos-osi-y-tcpip)
-      - [Modelo OSI](#modelo-osi)
-      - [Modelo TCP/IP](#modelo-tcpip)
-- [Paso 2](#paso-2-capa-física--cálculos-y-selección-de-tecnologías)
-   - [Cálculo de la Capacidad](#cálculo-de-la-capacidad-de-los-enlaces)
-   - [Técnicas de modulacion](#selección-de-técnicas-de-modulación)
-   - [Eficiencia del encapsulamiento](#evaluación-de-la-eficiencia-del-encapsulamiento)
-- [Paso 3](#paso-3-capa-de-red--direccionamiento-subneteo-y-enrutamiento)
-   - [Diseño de red](#diseño-del-esquema-de-direccionamiento-ip)
-   - 
+- [Paso 1](#paso-1-diseño-y-modelado-de-la-arquitectura-de-comunicación)  
+   - [Repaso de modelos](#repaso-de-modelos-osi-y-tcpip)  
+      - [Modelo OSI](#modelo-osi)  
+      - [Modelo TCP/IP](#modelo-tcpip)  
+- [Paso 2](#paso-2-capa-física--cálculos-y-selección-de-tecnologías)  
+   - [Cálculo de la Capacidad](#cálculo-de-la-capacidad-de-los-enlaces)  
+   - [Técnicas de modulacion](#selección-de-técnicas-de-modulación)  
+   - [Eficiencia del encapsulamiento](#evaluación-de-la-eficiencia-del-encapsulamiento)  
+- [Paso 3](#paso-3-capa-de-red--direccionamiento-subneteo-y-enrutamiento)  
+   - [Diseño de red](#diseño-del-esquema-de-direccionamiento-ip)  
+   - [Enrutamiento](#enrutamiento-y-rutas-óptimas)  
+- [Paso 4](#paso-4-capa-de-transporte--selección-de-protocolos-y-cálculo-del-tamaño-de-ventana)  
+   -[Seleccion de protocolos](#selección-de-protocolos)  
+   -[Tamaño de ventana](#cálculo-del-tamaño-de-ventana-en-tcp)  
+- [Paso 5](#paso-5-capa-de-aplicación--servicios-multiplexación-y-multimedia)  
+   -[Implementacion y DNS](#implementación-de-servicios-y-resolución-de-nombres)  
+   -[Adaptive streaming](#adaptación-de-calidad-según-ancho-de-banda)  
+- [Paso 6](#paso-6-seguridad--estrategias-y-configuración)  
+   -[Firewall y DMZ](#firewalls-y-dmz)  
+   -[VTP protocol](#protocolo-vtp)  
+   -[NAT](#natnetwork-address-translation)  
 
 # Paso 1: Diseño y Modelado de la Arquitectura de Comunicación
 
@@ -332,6 +342,7 @@ $$𝑆𝑁𝑅 = 10 𝑙𝑜𝑔_{10}(𝑆𝑁𝑅) = 10^{\frac{SNR}{10}} [dB]$$
 
 > Tener en cuenta que todo esto es teórico ya que el cisco packet pone limitaciones por el tipo de puerto ejm: el FastEthernet esta capado a 100Mbps
    
+> 
 
 ## Selección de Técnicas de Modulación
 La modulación es el proceso mediante el cual se adapta una señal digital a una portadora analógica para poder ser transmitida eficientemente por un medio físico (cable, aire o fibra).  
@@ -462,8 +473,33 @@ Cada VLAN tiene su propia subred /24 (máscara de subred 255.255.255.0), lo cual
 > **Nota:** Todas la Vlans y la red interna reciben sus IP's a traves del servidor de DHCP excepto los puntos/enlaces criticos.
 ---
 
-- Zona de Seguridad
-   
+### Zona de Seguridad
+Red de la zona de seguridad [Router]-----`Red externa`----[Firewall 1]-----`DMZ`-----[Firewall 2]-----`Red interna`----[Switch L3]   
+Telefonos exteriores: [Router]-----------[Switch]-----`Telefonos exteriores`.
+
+   - La red interna es la 192.168.2.0/24:
+    - **Rango de Hosts:** 192.168.2.2 – 192.168.2.254
+    - **Default gateway:** 192.168.2.1
+    - **Broadcast:** 192.168.2.256
+    - **Total de Hosts Útiles:** 254  
+
+   - La dmz es la 176.10.10.0/26:
+       - **Rango de Hosts:** 176.10.10.2 – 176.10.10.127
+       - **Default gateway:** 176.10.10.1
+       - **Broadcast:** 176.10.10.128
+       - **Total de Hosts Útiles:** 126  
+
+   - La red externa es la 200.1.4.0/24:
+       - **Rango de Hosts:** 200.1.4.2 – 200.4.4.254
+       - **Default gateway:** 200.1.4.1
+       - **Broadcast:** 200.1.4.256
+       - **Total de Hosts Útiles:** 254
+    
+>   - La red externa para los telefonos es 192.168.63.0/24
+       - **Rango de Hosts:** 192.168.4.2 – 200.4.4.254
+       - **Default gateway:** 200.1.4.1
+       - **Broadcast:** 200.1.4.256
+       - **Total de Hosts Útiles:** 254
 
 ---
 
@@ -509,6 +545,8 @@ Aparte la red se divide en multiple vlans cada una con su propia IP, gateway y b
    - **DDefault gateway:** 192.168.11.1
    - **Broadcast:** 192.168.11.256
    - **Total de Hosts Útiles:** 254
+
+Las direcciones fisicas importantes barra criticas no funcionan por DHCP Ejm: la dirección del propio DHCP
 
 Cada VLAN tiene su propia subred /24 (máscara de subred 255.255.255.0), lo cual permite hasta 254 hosts por segmento, ideal para entornos académicos de tamaño medio.
 
@@ -654,7 +692,13 @@ El tamaño óptimo de la ventana de transmisión TCP en los enlaces simulados es
 
 ## Implementación de Servicios y Resolución de Nombres
 ### 1. Diseño la configuración
+Cada edificion tiene su propia DMZ es decir su propios servicios en Segmentacion especifica
 
+| Servicio    | Protocolo | Función principal                                  |
+|-------------|-----------|----------------------------------------------------|
+| DNS         | UDP/TCP   | Resolución de nombres internos                    |
+| FTP/SFTP    | TCP       | Transferencia segura de archivos entre nodos      |
+| HTTP/HTTPS  | TCP       | Servicios web y acceso a plataformas multimedia    |
 
 ### 2. Proceso de Resolución de Nombres
 
@@ -701,4 +745,77 @@ Para asegurar una experiencia óptima a todos los usuarios, independientemente d
 - **Buffer adaptativo**: se gestiona un búfer inteligente para equilibrar entre fluidez y calidad.
 
 > En enlaces críticos, se priorizará el tráfico multimedia mediante políticas de **Quality of Service (QoS)** para garantizar estabilidad y reducir la latencia.
+
+
+# Paso 6: Seguridad – Estrategias y Configuración
+
+## Configuracion de seguridad
+Se implementaron estrategias de segmentación por zonas, uso de firewalls ASA 5506-X y 5505, control de tráfico mediante listas de control de acceso (ACL) y una arquitectura de red jerárquica con separación de zonas internas, DMZ y externas. Cada firewall cuenta con múltiples interfaces configuradas con niveles de seguridad apropiados y políticas específicas según su zona.
+
+## Firewalls y DMZ 
+
+### Zona Gubernamental
+La zona gubernamental cuenta con **dos firewalls ASA 5506-X**, los cuales actúan como puntos de seguridad perimetral y de segmentación para proteger los recursos críticos de la administración central. Estos dispositivos están configurados con múltiples interfaces y políticas de acceso para controlar el tráfico entre zonas internas, DMZ y conexiones externas.
+
+- ASA 5506-X inside_DMZ:
+   - ACL Inside_DMZ permite todo el trafico de red interna a la DMZ: extended permit ip any any.
+   - ACL DMZ inside permite solo trafico de respuesta de DNS, HTTP/HTTPS y de FTP/TFTP
+- ASA 5506-X DMZ_Outside:
+   - ACL DMZ_Outside permite trafico de los servidores al exterior.
+   - ACL Outside_DMZ permite solo trafico de respuesta de DNS, HTTP/HTTPS y de FTP/TFTP
+
+### Zona Seguridad
+La zona de seguridad cuenta con un solo firewall **ASA 5506-X** que actua omo entrada y salida, filtrando todo el trafico, segmentando la red en Externa-DMZ-Interna. El firewall cuenta con tres interfaces cada una con su ACL diferente y su propio nivel de seguridad
+
+- ASA 5506-X inside_DMZ:
+   - ACL Inside_DMZ permite todo el trafico de red interna a la DMZ: extended permit ip any any.
+   - ACL DMZ_inside permite solo trafico de respuesta de DNS, HTTP/HTTPS y de FTP/TFTP
+   - ACL DMZ_Outside permite trafico de los servidores al exterior.
+   - ACL Outside_DMZ permite solo trafico de respuesta de DNS, HTTP/HTTPS y de FTP/TFTP
+
+### Zona Transporte
+La zona de Transporte cuenta con **dos firewalls ASA 5506-X**, los cuales actúan como puntos de seguridad perimetral y de segmentación para proteger los recursos críticos de la administración central. Estos dispositivos están configurados con múltiples interfaces y políticas de acceso para controlar el tráfico entre zonas internas, DMZ y conexiones externas.  
+
+- ASA 5506-X inside_DMZ:
+   - ACL Inside_DMZ permite todo el trafico de red interna a la DMZ: extended permit ip any any.
+   - ACL DMZ inside permite solo trafico de respuesta de DNS, HTTP/HTTPS y de FTP/TFTP
+- ASA 5506-X DMZ_Outside:
+   - ACL DMZ_Outside permite trafico de los servidores al exterior.
+   - ACL Outside_DMZ permite solo trafico de respuesta de DNS, HTTP/HTTPS y de FTP/TFTP
+
+Ademas la zona de Transporte cuenta con un tercer firewall **ASA 5505** que separa la red interna de los sensores externos
+- ASA 5505:
+   - ACL Inside_Outside permite todo el trafico de red interna a la DMZ: extended permit ip any any.
+   - ACL Outside_Inside inside permite solo trafico de respuesta de los sensores IoT.
+
+
+## Protocolo VTP
+Se ha implementado **VTP (VLAN Trunking Protocol)** para centralizar la administración de VLANs en la infraestructura de switches, lo que permite una propagación automática de configuraciones de VLAN desde un servidor hacia todos los clientes dentro del mismo dominio VTP.  
+Ademas esto permite la segmentacion de las redes en VLANS lo que impide que al haber una brecha se pueda acceder a todda la red al instante.  
+Todas las zonas tiene su propio dominio y contraseña
+
+### Zona Gubernamental
+- **Vtp server**: Switch L3
+- **VTP Clients**: Switch L2
+- **VTP domain**: gov
+- **VTP password**: c@labazas  
+
+
+### Zona Seguridad
+- **Vtp server**: Switch L3
+- **VTP Clients**: Switch L2
+- **VTP domain**: central
+- **VTP password**: central  
+
+### Zona Transporte
+- **Vtp server**: Switch L3
+- **VTP Clients**: Switch L2
+- **VTP domain**: transporte
+- **VTP password**: transp0rte
+
+## NAT(Network address translation)
+**NAT (Traducción de Direcciones de Red)** es una técnica que permite que dispositivos en una red privada accedan a redes públicas (como Internet) utilizando una única dirección IP pública o un conjunto limitado de ellas. También protege la red interna ocultando sus direcciones reales.
+
+Se ha implementado **NAT dinámico y PAT (Port Address Translation)** en los firewalls ASA para permitir que los hosts internos accedan a servicios externos mientras se mantiene la seguridad de la red.
+
 
