@@ -202,6 +202,11 @@ Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus 
 ---
 
 - Zona de Seguridad
+
+![Central drawio](https://github.com/user-attachments/assets/5f0009ee-16a1-495c-b1f9-493f43ac3310)
+
+
+
    - **Elemento:** Central de Seguridad
    - **Dispositivos:**
         - Router cisco 2911
@@ -217,6 +222,13 @@ Cada zona o red aislada cuenta con sus propios dispositivos, su propia red, sus 
         - X2 TV-PT
         - X8 IP-phone
         - X6 Webcams
+
+    - Cables de cobre cat 6 y Gb para conexione entre dispositivos, tambien coaxial cuando necesario
+
+    
+![image](https://github.com/user-attachments/assets/46ef7956-4c1e-45b9-9db5-0fe36d849bb7)
+![image](https://github.com/user-attachments/assets/f8e530ed-cf73-4b67-8c41-4bafd5bc113b)
+
 
 ---
 
@@ -500,29 +512,52 @@ Aparte la red se divide en multiple vlans cada una con su propia IP, gateway y b
 
 Cada VLAN tiene su propia subred /24 (máscara de subred 255.255.255.0), lo cual permite hasta 254 hosts por segmento, ideal para entornos académicos de tamaño medio.
 
-**VLAN 100 – 192.168.10.0/24** Recepción
+**VLAN 5 – 192.168.5.0/24** Recepción
 
-   - **Rango de Hosts:** 192.168.10.2 – 192.168.10.254
-   - **DDefault gateway:** 192.168.10.1
-   - **Broadcast:** 192.168.10.256
+   - **Rango de Hosts:** 192.168.5.2 – 192.168.5.254
+   - **DDefault gateway:** 192.168.5.1
+   - **Broadcast:** 192.168.5.256
    - **Total de Hosts Útiles:** 254
 
-**VLAN 200 – 192.168.20.0/24** Planta 1
+**VLAN 15 – 192.168.15.0/24** Planta 1
 
-   - **Rango de Hosts:** 192.168.20.2 – 192.168.200.254
-   - **Default gateway:** 192.168.20.1
-   - **Broadcast:** 192.168.20.256
+   - **Rango de Hosts:** 192.168.15.2 – 192.168.15.254
+   - **Default gateway:** 192.168.15.1
+   - **Broadcast:** 192.168.15.256
    - **Total de Hosts Útiles:** 254
 
-**VLAN 300 – 192.168.30.0/24** Planta 2
+**VLAN 25 – 192.168.25.0/24** Planta 2
 
-- **Rango de Hosts:** 192.168.30.2 – 192.168.30.254
-- **DDefault gateway:** 192.168.30.1
-- **Broadcast:** 192.168.30.256
+- **Rango de Hosts:** 192.168.25.2 – 192.168.25.254
+- **DDefault gateway:** 192.168.25.1
+- **Broadcast:** 192.168.25.256
 - **Total de Hosts Útiles:** 254
 
 ## Enrutamiento y Rutas Óptimas
+### Enrutamiento dinamico
 
+#### Dijkstra/OSPF
+
+- **Protocolo:** OSPF (Open Shortest Path First)
+- **Algoritmo:** Dijkstra (estado de enlace)
+- **Ventajas:**
+  - Cálculo de rutas óptimas basado en costo
+  - Convergencia rápida
+  - Soporta VLSM y CIDR
+  - Escalable para redes grandes
+- **Ideal para:** Redes críticas como zonas de seguridad, centros de emergencia, hospitales
+
+#### Routing Information Protocol/RIP
+
+- **Protocolo:** RIP (Routing Information Protocol)
+- **Algoritmo:** Bellman-Ford (vector de distancia)
+- **Ventajas:**
+  - Fácil de configurar
+  - Adecuado para redes pequeñas
+- **Desventajas:**
+  - Límite de 15 saltos
+  - Convergencia lenta
+  - No tiene en cuenta métricas como ancho de banda
 
 
 
